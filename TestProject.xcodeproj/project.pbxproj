@@ -10,7 +10,6 @@
 		20CE21E924FE3B8F00994B8E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20CE21E824FE3B8F00994B8E /* AppDelegate.swift */; };
 		20CE21EB24FE3B8F00994B8E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20CE21EA24FE3B8F00994B8E /* SceneDelegate.swift */; };
 		20CE21EF24FE3B9000994B8E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 20CE21EE24FE3B9000994B8E /* Assets.xcassets */; };
-		20CE21F224FE3B9000994B8E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 20CE21F124FE3B9000994B8E /* Preview Assets.xcassets */; };
 		20CE21F524FE3B9000994B8E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 20CE21F324FE3B9000994B8E /* LaunchScreen.storyboard */; };
 		20CE220024FE3B9000994B8E /* TestProjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20CE21FF24FE3B9000994B8E /* TestProjectTests.swift */; };
 		20CE220D24FE3C4D00994B8E /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 20CE220C24FE3C4D00994B8E /* ViewController.xib */; };
@@ -51,7 +50,6 @@
 		20CE21E824FE3B8F00994B8E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		20CE21EA24FE3B8F00994B8E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		20CE21EE24FE3B9000994B8E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		20CE21F124FE3B9000994B8E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		20CE21F424FE3B9000994B8E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		20CE21F624FE3B9000994B8E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		20CE21FB24FE3B9000994B8E /* TestProjectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestProjectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -119,33 +117,18 @@
 		20CE21E724FE3B8F00994B8E /* TestProject */ = {
 			isa = PBXGroup;
 			children = (
+				20CE224124FEBEB700994B8E /* Application */,
+				20CE224024FEBE8A00994B8E /* View */,
+				20CE223F24FEBE6C00994B8E /* ViewController */,
+				20CE223E24FEBE6000994B8E /* ViewModel */,
+				20CE223D24FEBE3800994B8E /* Models */,
 				20CE223824FE8C7800994B8E /* Extensions */,
 				20CE222524FE82D500994B8E /* Network */,
-				20CE222324FE6F8800994B8E /* MovieCollectionViewCell.xib */,
-				20CE221724FE3D1B00994B8E /* ViewModel.swift */,
-				20CE223B24FEBA4E00994B8E /* Movie.swift */,
-				20CE221D24FE40A600994B8E /* Section.swift */,
 				20CE221024FE3C7700994B8E /* Coordinator */,
-				20CE220E24FE3C6600994B8E /* ViewController.swift */,
-				20CE220C24FE3C4D00994B8E /* ViewController.xib */,
-				20CE221924FE3EFE00994B8E /* MovieCollectionViewCell.swift */,
-				20CE21E824FE3B8F00994B8E /* AppDelegate.swift */,
-				20CE222124FE416200994B8E /* SectionHeaderReusableView.swift */,
-				20CE21EA24FE3B8F00994B8E /* SceneDelegate.swift */,
 				20CE21EE24FE3B9000994B8E /* Assets.xcassets */,
 				20CE21F324FE3B9000994B8E /* LaunchScreen.storyboard */,
-				20CE21F624FE3B9000994B8E /* Info.plist */,
-				20CE21F024FE3B9000994B8E /* Preview Content */,
 			);
 			path = TestProject;
-			sourceTree = "<group>";
-		};
-		20CE21F024FE3B9000994B8E /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				20CE21F124FE3B9000994B8E /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		20CE21FE24FE3B9000994B8E /* TestProjectTests */ = {
@@ -189,6 +172,52 @@
 				20CE223924FE8C8F00994B8E /* UIImageView+Extension.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		20CE223D24FEBE3800994B8E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				20CE223B24FEBA4E00994B8E /* Movie.swift */,
+				20CE221D24FE40A600994B8E /* Section.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		20CE223E24FEBE6000994B8E /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				20CE221724FE3D1B00994B8E /* ViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		20CE223F24FEBE6C00994B8E /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				20CE220E24FE3C6600994B8E /* ViewController.swift */,
+				20CE220C24FE3C4D00994B8E /* ViewController.xib */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		20CE224024FEBE8A00994B8E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				20CE221924FE3EFE00994B8E /* MovieCollectionViewCell.swift */,
+				20CE222124FE416200994B8E /* SectionHeaderReusableView.swift */,
+				20CE222324FE6F8800994B8E /* MovieCollectionViewCell.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		20CE224124FEBEB700994B8E /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				20CE21E824FE3B8F00994B8E /* AppDelegate.swift */,
+				20CE21EA24FE3B8F00994B8E /* SceneDelegate.swift */,
+				20CE21F624FE3B9000994B8E /* Info.plist */,
+			);
+			path = Application;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -275,7 +304,6 @@
 				20CE222424FE6F8800994B8E /* MovieCollectionViewCell.xib in Resources */,
 				20CE220D24FE3C4D00994B8E /* ViewController.xib in Resources */,
 				20CE21F524FE3B9000994B8E /* LaunchScreen.storyboard in Resources */,
-				20CE21F224FE3B9000994B8E /* Preview Assets.xcassets in Resources */,
 				20CE21EF24FE3B9000994B8E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -467,9 +495,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"TestProject/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = TestProject/Info.plist;
+				INFOPLIST_FILE = TestProject/Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -486,9 +513,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"TestProject/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = TestProject/Info.plist;
+				INFOPLIST_FILE = TestProject/Application/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
