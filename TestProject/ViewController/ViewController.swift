@@ -19,6 +19,7 @@ class ViewController: UIViewController {
             self.applySnapshot(animatingDifferences: true)
         }
     }
+    private var networkSections: [Section] = []
     private lazy var dataSource = makeDataSource()
     private var searchController = UISearchController(searchResultsController: nil)
     var viewModel: ViewModelling!
@@ -37,21 +38,19 @@ class ViewController: UIViewController {
                     guard let movies = movies else { return }
                     let newSection = Section(title: "Now Playing", videos: movies)
                     self.sections.append(newSection)
+                    self.networkSections.append(newSection)
         }
         configureSearchController()
         configureLayout()
-        applySnapshot(animatingDifferences: false)
     }
     
     
     // MARK: - Functions
     func makeDataSource() -> DataSource {
-        // 1
         let dataSource = DataSource(
             collectionView: collectionView,
             cellProvider: { (collectionView, indexPath, video) ->
                 UICollectionViewCell? in
-                // 2
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: "MovieCollectionViewCell",
                     for: indexPath) as? MovieCollectionViewCell
@@ -80,7 +79,9 @@ class ViewController: UIViewController {
         sections.forEach { section in
             snapshot.appendItems(section.videos, toSection: section)
         }
-        dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+        DispatchQueue.main.async {
+            self.dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+        }
     }
 }
 
@@ -92,25 +93,33 @@ extension ViewController: UISearchResultsUpdating {
     }
     
     func filteredSections(for queryOrNil: String?) -> [Section] {
-        let sections = self.sections
+        let sections = networkSections
         guard
             let query = queryOrNil,
             !query.isEmpty
             else {
                 return sections
         }
-        
-        return sections.filter { section in
-            var matches = section.title.lowercased().contains(query.lowercased())
-            for video in section.videos {
-                if video.title.lowercased().contains(query.lowercased()) {
-                    matches = true
-                    break
-                }
-            }
-            return matches
+        let filteredMovies = sections.first!.videos.filter { video in
+            return searchLogic(title: video.title.lowercased(), query: query.lowercased())
         }
+        return [Section(title: "Search Result", videos: filteredMovies)]
     }
+    
+    func searchLogic(title: String, query: String) -> Bool {
+        let words = title.split{$0 == " "}.map(String.init)
+        let startsWith =  words.contains { (word) -> Bool in
+            word.starts(with: query)
+        }
+        let wordsPresent: Bool = {
+            let queryWords = query.split{$0 == " "}.map(String.init)
+            let set1:Set<String> = Set(queryWords)
+            let set2:Set<String> = Set(words)
+            return set1.subtracting(set2).isEmpty
+        }()
+        return startsWith || wordsPresent
+    }
+
     
     func configureSearchController() {
         searchController.searchResultsUpdater = self
