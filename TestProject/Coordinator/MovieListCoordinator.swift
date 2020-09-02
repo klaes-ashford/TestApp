@@ -35,7 +35,7 @@ class MovieDetailsCoordinator: Coordinator {
     
     private let presenter: UINavigationController
     private let viewModel: ViewModelling
-    private var movieDetailsViewController: ViewController!
+    private var movieDetailsViewController: DetailsViewController!
     
     init(presenter: UINavigationController, viewModel: ViewModelling) {
         self.presenter = presenter
@@ -43,7 +43,7 @@ class MovieDetailsCoordinator: Coordinator {
     }
     
     func start() {
-        let movieDetailsViewController = ViewController(nibName: "ViewController", bundle: nil)
+        let movieDetailsViewController = DetailsViewController(nibName: nil, bundle: nil)
         presenter.pushViewController(movieDetailsViewController, animated: true)
         self.movieDetailsViewController = movieDetailsViewController
     }
