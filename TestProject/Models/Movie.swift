@@ -46,7 +46,7 @@ struct Movie {
     let overview: String
 }
 
-extension Movie: Decodable {
+extension Movie: Codable {
     
     enum MovieCodingKeys: String, CodingKey {
         case id
@@ -61,7 +61,6 @@ extension Movie: Decodable {
     
     init(from decoder: Decoder) throws {
         let movieContainer = try decoder.container(keyedBy: MovieCodingKeys.self)
-        
         id = try movieContainer.decode(Int.self, forKey: .id)
         posterPath = try movieContainer.decode(String.self, forKey: .posterPath)
         backdrop = try movieContainer.decode(String.self, forKey: .backdrop)
@@ -69,6 +68,17 @@ extension Movie: Decodable {
         releaseDate = try movieContainer.decode(String.self, forKey: .releaseDate)
         rating = try movieContainer.decode(Double.self, forKey: .rating)
         overview = try movieContainer.decode(String.self, forKey: .overview)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: MovieCodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(posterPath, forKey: .posterPath)
+        try container.encode(backdrop, forKey: .backdrop)
+        try container.encode(title, forKey: .title)
+        try container.encode(releaseDate, forKey: .releaseDate)
+        try container.encode(rating, forKey: .rating)
+        try container.encode(overview, forKey: .overview)
     }
 }
 

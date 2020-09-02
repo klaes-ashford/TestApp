@@ -9,22 +9,26 @@
 import UIKit
 
 class Section: Hashable {
-  var id = UUID()
-  var title: String
-  var videos: [Movie]
-  
-  init(title: String, videos: [Movie]) {
-    self.title = title
-    self.videos = videos
-  }
-
+    enum SectionType: Int {
+        case search
+        case movie
+    }
+    var id = UUID()
+    var title: String
+    var videos: [Movie]
+    
+    init(title: String, videos: [Movie]) {
+        self.title = title
+        self.videos = videos
+    }
+    
     func hash(into hasher: inout Hasher) {
-    hasher.combine(id)
-  }
-  
-  static func == (lhs: Section, rhs: Section) -> Bool {
-    lhs.id == rhs.id
-  }
+        hasher.combine(id)
+    }
+    
+    static func == (lhs: Section, rhs: Section) -> Bool {
+        lhs.id == rhs.id
+    }
 }
 
 //extension Section {

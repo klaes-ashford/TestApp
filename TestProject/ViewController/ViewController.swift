@@ -12,7 +12,8 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     var networkManager: NetworkManager!
-
+    private var isSearching = false
+    
     // MARK: - Properties
     private var sections: [Section] = [] {
         didSet {
@@ -32,13 +33,13 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        self.collectionView.register(UINib(nibName:"MovieCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "MovieCollectionViewCell")
+        self.collectionView.delegate = self
         networkManager = NetworkManager()
-                networkManager.getNewMovies(page: 1) { movies, error in
-                    guard let movies = movies else { return }
-                    let newSection = Section(title: "Now Playing", videos: movies)
-                    self.sections.append(newSection)
-                    self.networkSections.append(newSection)
+        networkManager.getNewMovies(page: 1) { movies, error in
+            guard let movies = movies else { return }
+            let newSection = Section(title: "Now Playing", videos: movies)
+            self.sections.append(newSection)
+            self.networkSections.append(newSection)
         }
         configureSearchController()
         configureLayout()
@@ -51,6 +52,27 @@ class ViewController: UIViewController {
             collectionView: collectionView,
             cellProvider: { (collectionView, indexPath, video) ->
                 UICollectionViewCell? in
+                if self.isSearching {
+                    let sectionType = Section.SectionType(rawValue: indexPath.section)
+                    switch sectionType {
+                    case .movie:
+                        let cell = collectionView.dequeueReusableCell(
+                            withReuseIdentifier: "MovieCollectionViewCell",
+                            for: indexPath) as? MovieCollectionViewCell
+                        cell?.movie = video
+                        return cell
+
+                    case .search:
+                        let cell = collectionView.dequeueReusableCell(
+                            withReuseIdentifier: "SearchResultCollectionViewCell",
+                            for: indexPath) as? SearchResultCollectionViewCell
+                        cell?.movie = video
+                        return cell
+
+                    default: fatalError()
+                    }
+                    
+                }
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: "MovieCollectionViewCell",
                     for: indexPath) as? MovieCollectionViewCell
@@ -93,6 +115,7 @@ extension ViewController: UISearchResultsUpdating {
     }
     
     func filteredSections(for queryOrNil: String?) -> [Section] {
+        isSearching = !(queryOrNil?.isEmpty ?? true)
         let sections = networkSections
         guard
             let query = queryOrNil,
@@ -103,7 +126,8 @@ extension ViewController: UISearchResultsUpdating {
         let filteredMovies = sections.first!.videos.filter { video in
             return searchLogic(title: video.title.lowercased(), query: query.lowercased())
         }
-        return [Section(title: "Search Result", videos: filteredMovies)]
+        let recentSearches = retrieveSearchedMovies()
+        return [Section(title: "Recent Searches", videos: recentSearches), Section(title: "Search Result", videos: filteredMovies)]
     }
     
     func searchLogic(title: String, query: String) -> Bool {
@@ -119,7 +143,30 @@ extension ViewController: UISearchResultsUpdating {
         }()
         return startsWith || wordsPresent
     }
-
+        
+    func storeSearched(movies: [Movie]) {
+        do {
+            let plistURL = URL(fileURLWithPath: "myAPIKeys", relativeTo: FileManager.applicationSupportDirectory).appendingPathExtension("plist")
+            
+            let plistEncoder = PropertyListEncoder()
+            plistEncoder.outputFormat = .xml
+            let plistData = try plistEncoder.encode(movies)
+            try plistData.write(to: plistURL)
+        } catch {print(error)        }
+        
+    }
+    
+    func retrieveSearchedMovies() -> [Movie] {
+        let plistURL = URL(fileURLWithPath: "myAPIKeys", relativeTo: FileManager.applicationSupportDirectory).appendingPathExtension("plist")
+        do  {
+            let plistDecoder = PropertyListDecoder()
+            let data = try Data.init(contentsOf: plistURL)
+            let value = try plistDecoder.decode([Movie].self, from: data)
+            return value
+        } catch {            print(error)
+            return []
+        }
+    }
     
     func configureSearchController() {
         searchController.searchResultsUpdater = self
@@ -133,6 +180,8 @@ extension ViewController: UISearchResultsUpdating {
 // MARK: - Layout Handling
 extension ViewController {
     private func configureLayout() {
+        self.collectionView.register(UINib(nibName:"MovieCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "MovieCollectionViewCell")
+        self.collectionView.register(UINib(nibName:"SearchResultCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "SearchResultCollectionViewCell")
         collectionView.register(
             SectionHeaderReusableView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
@@ -140,10 +189,26 @@ extension ViewController {
         )
         collectionView.collectionViewLayout = UICollectionViewCompositionalLayout(sectionProvider: { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
             let isPhone = layoutEnvironment.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiom.phone
-            let size = NSCollectionLayoutSize(
-                widthDimension: NSCollectionLayoutDimension.fractionalWidth(1),
-                heightDimension: NSCollectionLayoutDimension.absolute(isPhone ? 280 : 250)
-            )
+            var size: NSCollectionLayoutSize
+            if self.isSearching {
+                if sectionIndex == 0 {
+                    size = NSCollectionLayoutSize(
+                        widthDimension: NSCollectionLayoutDimension.fractionalWidth(1),
+                        heightDimension: NSCollectionLayoutDimension.absolute(isPhone ? 44 : 60)
+                    )
+                } else {
+                    size = NSCollectionLayoutSize(
+                        widthDimension: NSCollectionLayoutDimension.fractionalWidth(1),
+                        heightDimension: NSCollectionLayoutDimension.absolute(isPhone ? 280 : 250)
+                    )
+
+                }
+                            } else {
+                size = NSCollectionLayoutSize(
+                    widthDimension: NSCollectionLayoutDimension.fractionalWidth(1),
+                    heightDimension: NSCollectionLayoutDimension.absolute(isPhone ? 280 : 250)
+                )
+            }
             let itemCount = isPhone ? 1 : 3
             let item = NSCollectionLayoutItem(layoutSize: size)
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: size, subitem: item, count: itemCount)
@@ -170,5 +235,22 @@ extension ViewController {
         coordinator.animate(alongsideTransition: { context in
             self.collectionView.collectionViewLayout.invalidateLayout()
         }, completion: nil)
+    }
+}
+
+// MARK: - UICollectionViewDataSource Implementation
+extension ViewController: UICollectionViewDelegate {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
+        if isSearching {
+            guard let movie = dataSource.itemIdentifier(for: indexPath) else {
+                return
+            }
+            var movies = retrieveSearchedMovies()
+            movies.append(movie)
+            storeSearched(movies: movies)
+        }
     }
 }
