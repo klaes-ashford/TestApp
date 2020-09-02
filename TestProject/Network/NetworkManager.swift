@@ -24,6 +24,7 @@ enum Result<String>{
 
 protocol SourceManager {
     func getNewMovies(page: Int, completion: @escaping (_ movie: [Movie]?,_ error: String?)->())
+    func getSynopsis(id: Int, completion: @escaping (_ synopsis: Synopsis?,_ error: String?)->())
 }
 
 struct NetworkManager: SourceManager {
@@ -47,9 +48,36 @@ struct NetworkManager: SourceManager {
                         return
                     }
                     do {
-                        let jsonData = try JSONSerialization.jsonObject(with: responseData, options: .mutableContainers)
                         let apiResponse = try JSONDecoder().decode(MovieApiResponse.self, from: responseData)
                         completion(apiResponse.movies,nil)
+                    }catch {
+                        completion(nil, NetworkResponse.unableToDecode.rawValue)
+                    }
+                case .failure(let networkFailureError):
+                    completion(nil, networkFailureError)
+                }
+            }
+        }
+    }
+    
+    func getSynopsis(id: Int, completion: @escaping (_ synopsis: Synopsis?,_ error: String?)->()){
+        router.request(.synopsis(id: id)) { data, response, error in
+            
+            if error != nil {
+                completion(nil, "Please check your network connection.")
+            }
+            
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        completion(nil, NetworkResponse.noData.rawValue)
+                        return
+                    }
+                    do {
+                        let apiResponse = try JSONDecoder().decode(Synopsis.self, from: responseData)
+                        completion(apiResponse,nil)
                     }catch {
                         completion(nil, NetworkResponse.unableToDecode.rawValue)
                     }

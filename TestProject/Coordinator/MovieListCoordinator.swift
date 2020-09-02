@@ -34,16 +34,17 @@ class MovieListCoordinator: Coordinator {
 class MovieDetailsCoordinator: Coordinator {
     
     private let presenter: UINavigationController
-    private let viewModel: ViewModelling
+    private let viewModel: DetailsViewModelling
     private var movieDetailsViewController: DetailsViewController!
     
-    init(presenter: UINavigationController, viewModel: ViewModelling) {
+    init(presenter: UINavigationController, viewModel: DetailsViewModelling) {
         self.presenter = presenter
         self.viewModel = viewModel
     }
     
     func start() {
         let movieDetailsViewController = DetailsViewController(nibName: nil, bundle: nil)
+        movieDetailsViewController.viewModel = viewModel
         presenter.pushViewController(movieDetailsViewController, animated: true)
         self.movieDetailsViewController = movieDetailsViewController
     }
@@ -52,7 +53,7 @@ class MovieDetailsCoordinator: Coordinator {
 
 extension MovieListCoordinator: movieListViewControllerDelegate {
     func viewControllerDidSelectMovie(_ selectedMovie: Movie) {
-        let movieDetailCoordinator = MovieDetailsCoordinator(presenter: presenter, viewModel: ViewModel(networkManager: NetworkManager()))
+        let movieDetailCoordinator = MovieDetailsCoordinator(presenter: presenter, viewModel: DetailsViewModel(networkManager: NetworkManager(), movieId: selectedMovie.id))
         movieDetailCoordinator.start()
         self.movieDetailsCordinator = movieDetailCoordinator
     }

@@ -18,6 +18,7 @@ public enum MovieApi {
     case popular(page:Int)
     case newMovies(page:Int)
     case video(id:Int)
+    case synopsis(id: Int)
 }
 
 extension MovieApi: EndPointType {
@@ -45,6 +46,8 @@ extension MovieApi: EndPointType {
             return "now_playing"
         case .video(let id):
             return "\(id)/videos"
+        case .synopsis(let id):
+            return "\(id)"
         }
     }
     
@@ -59,6 +62,11 @@ extension MovieApi: EndPointType {
                                       bodyEncoding: .urlEncoding,
                                       urlParameters: ["page":page,
                                                       "api_key":NetworkManager.MovieAPIKey])
+        case .synopsis:
+            return .requestParameters(bodyParameters: nil,
+                                      bodyEncoding: .urlEncoding,
+                                      urlParameters: ["api_key":NetworkManager.MovieAPIKey])
+
         default:
             return .request
         }
