@@ -23,8 +23,7 @@ typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Movie>
 
 class ViewModel: ViewModelling {
     var sections: Box<[Section]> = Box([])
-    
-    var networkManager: SourceManager
+    private var networkManager: SourceManager
     var isSearching = false
     private var networkSections: [Section] = []
     
@@ -48,7 +47,7 @@ class ViewModel: ViewModelling {
         return [Section(title: "Recent Searches", videos: recentSearches), Section(title: "Search Result", videos: filteredMovies)]
     }
     
-    func searchLogic(title: String, query: String) -> Bool {
+    private func searchLogic(title: String, query: String) -> Bool {
         let words = title.split{$0 == " "}.map(String.init)
         let startsWith =  words.contains { (word) -> Bool in
             word.starts(with: query)
@@ -62,7 +61,7 @@ class ViewModel: ViewModelling {
         return startsWith || wordsPresent
     }
     
-    func storeSearched(movies: [Movie]) {
+    private func storeSearched(movies: [Movie]) {
         do {
             let plistURL = URL(fileURLWithPath: "myAPIKeys", relativeTo: FileManager.applicationSupportDirectory).appendingPathExtension("plist")
             
@@ -74,7 +73,7 @@ class ViewModel: ViewModelling {
         
     }
     
-    func retrieveSearchedMovies() -> [Movie] {
+    private func retrieveSearchedMovies() -> [Movie] {
         let plistURL = URL(fileURLWithPath: "myAPIKeys", relativeTo: FileManager.applicationSupportDirectory).appendingPathExtension("plist")
         do  {
             let plistDecoder = PropertyListDecoder()

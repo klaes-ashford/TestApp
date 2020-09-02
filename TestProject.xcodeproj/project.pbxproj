@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		201499D024FEDBDB00D772CD /* FileManager+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 201499CF24FEDBDB00D772CD /* FileManager+Extension.swift */; };
-		201499D224FEDD3800D772CD /* MovieSubset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 201499D124FEDD3800D772CD /* MovieSubset.swift */; };
 		201499D524FF659D00D772CD /* SearchResultCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 201499D324FF659D00D772CD /* SearchResultCollectionViewCell.swift */; };
 		201499D624FF659D00D772CD /* SearchResultCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 201499D424FF659D00D772CD /* SearchResultCollectionViewCell.xib */; };
 		201499D924FF8A5200D772CD /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 201499D724FF8A5200D772CD /* DetailsViewController.swift */; };
@@ -54,7 +53,6 @@
 
 /* Begin PBXFileReference section */
 		201499CF24FEDBDB00D772CD /* FileManager+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Extension.swift"; sourceTree = "<group>"; };
-		201499D124FEDD3800D772CD /* MovieSubset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSubset.swift; sourceTree = "<group>"; };
 		201499D324FF659D00D772CD /* SearchResultCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCollectionViewCell.swift; sourceTree = "<group>"; };
 		201499D424FF659D00D772CD /* SearchResultCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchResultCollectionViewCell.xib; sourceTree = "<group>"; };
 		201499D724FF8A5200D772CD /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
@@ -194,7 +192,6 @@
 			children = (
 				20CE223B24FEBA4E00994B8E /* Movie.swift */,
 				20CE221D24FE40A600994B8E /* Section.swift */,
-				201499D124FEDD3800D772CD /* MovieSubset.swift */,
 				201499DB24FFB2AF00D772CD /* Box.swift */,
 			);
 			path = Models;
@@ -360,7 +357,6 @@
 				20CE222D24FE834700994B8E /* Router.swift in Sources */,
 				20CE223124FE837600994B8E /* HttpTask.swift in Sources */,
 				20CE21EB24FE3B8F00994B8E /* SceneDelegate.swift in Sources */,
-				201499D224FEDD3800D772CD /* MovieSubset.swift in Sources */,
 				20CE223C24FEBA4E00994B8E /* Movie.swift in Sources */,
 				20CE221424FE3C7700994B8E /* ApplicationCoordinator.swift in Sources */,
 				20CE221524FE3C7700994B8E /* MovieListCoordinator.swift in Sources */,
