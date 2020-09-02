@@ -13,7 +13,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     var networkManager: NetworkManager!
     private var isSearching = false
-    
+    weak var delegate: movieListViewControllerDelegate?
+
     // MARK: - Properties
     private var sections: [Section] = [] {
         didSet {
@@ -244,13 +245,14 @@ extension ViewController: UICollectionViewDelegate {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
+        guard let movie = dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
         if isSearching {
-            guard let movie = dataSource.itemIdentifier(for: indexPath) else {
-                return
-            }
             var movies = retrieveSearchedMovies()
             movies.append(movie)
             storeSearched(movies: movies)
         }
+        delegate?.viewControllerDidSelectMovie(movie)
     }
 }
