@@ -19,7 +19,7 @@ class ApplicationCoordinator: Coordinator {
         self.window = window
         rootViewController = UINavigationController()
         rootViewController.navigationBar.prefersLargeTitles = true
-        let viewModel = ViewModel()
+        let viewModel = ViewModel(networkManager: NetworkManager())
         flickerListCoordinator = MovieListCoordinator(presenter: rootViewController, viewModel: viewModel)
     }
     

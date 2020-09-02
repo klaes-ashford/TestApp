@@ -52,7 +52,7 @@ class MovieDetailsCoordinator: Coordinator {
 
 extension MovieListCoordinator: movieListViewControllerDelegate {
     func viewControllerDidSelectMovie(_ selectedMovie: Movie) {
-        let movieDetailCoordinator = MovieDetailsCoordinator(presenter: presenter, viewModel: ViewModel())
+        let movieDetailCoordinator = MovieDetailsCoordinator(presenter: presenter, viewModel: ViewModel(networkManager: NetworkManager()))
         movieDetailCoordinator.start()
         self.movieDetailsCordinator = movieDetailCoordinator
     }

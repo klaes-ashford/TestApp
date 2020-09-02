@@ -22,7 +22,11 @@ enum Result<String>{
     case failure(String)
 }
 
-struct NetworkManager {
+protocol SourceManager {
+    func getNewMovies(page: Int, completion: @escaping (_ movie: [Movie]?,_ error: String?)->())
+}
+
+struct NetworkManager: SourceManager {
     static let environment : NetworkEnvironment = .production
     static let MovieAPIKey = "6f97be1a69270901d58aaadcfb60058b"
     let router = Router<MovieApi>()
